@@ -1,1 +1,1 @@
-design of this project (In Chinese)
+design of this project
