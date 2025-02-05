@@ -1,0 +1,9 @@
+Workflow of the robot  
+1. Preparion: The arm puts the pieces into the corresponding positions.
+2. The player click the button to select the game mode.
+3. The game starts! The player place the piece into the positions.
+4. The hall-sensor under the board detects which stone does the player moves and responds.
+5. The hall-sensors, altogether, produces a matrix of the whole board.
+6. The Arduino receives the message and gives back the best position to play.
+7. The robotic arm receives the result, picks up the piece and moves to the right position.
+8. The screen detects whether there's restract. If so, the robotic arm stops and places back the two pieces.
