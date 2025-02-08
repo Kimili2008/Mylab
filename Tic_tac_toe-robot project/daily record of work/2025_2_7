@@ -1,0 +1,15 @@
+date:2025_2_6
+
+## person 1
+Name: *KIMI 李子禾*  
+Today's work:
+- design the game board(The board has to be decent in shape, easy to make and have space for the robotic arm to move.)  
+Tommorrow's plan:  
+- optimize the program of the user interface
+- wait for new components to be delivered
+
+### The problem met today: 
+Problem1:  
+When designing the board, the 3d-printed board was used at first, but it was replaced quickly because it doesn't have a robust structure.  
+Solution:
+We decide to use the opencv so that hall-sensors are not used in the project, and the board can be hand-made.
