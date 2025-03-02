@@ -3,16 +3,17 @@ import numpy as np
 counter=0
 pre_list2=[]
 black_bordered_centers=[]
-def detect_chessboard(image, board_size=(3, 3)):
+def detect_chessboard(image, previous_grid_centers:list,board_size=(3, 3)):
     """
     检测棋盘上的棋子，并在图像上绘制棋盘和棋子。
 
     参数：
         image (numpy.ndarray): 输入的摄像头捕获的图像。
-        board_size (tuple): 棋盘大小，默认为 (3, 3)。
 
     返回：
         list: 二维列表，表示棋盘状态（0: 空，1: 白棋，2: 黑棋）。
+        processedimage: 处理过的图像，包含了黑框中心和圆位置，颜色的显示
+        
     """
     # 初始化棋盘状态
     rows, cols = board_size
@@ -20,7 +21,7 @@ def detect_chessboard(image, board_size=(3, 3)):
 
     # 转换为灰度图像并应用高斯模糊
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (9, 9), 2,2)
+    gray = cv2.GaussianBlur(gray, (9, 9),2,2)
 
     # 使用 HoughCircles 检测圆
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1,
@@ -29,12 +30,22 @@ def detect_chessboard(image, board_size=(3, 3)):
                                param2=40,  # 累加器阈值
                                minRadius=15,
                                maxRadius=40)
-
+    
+    grid_centers = calculate_grid_centers(image)
+    
+    if len(grid_centers) == 9:
+        previous_grid_centers = grid_centers
+    else:  
+        grid_centers = previous_grid_centers
+    #print(len(grid_centers),"grid now")
+    #print(grid_centers)
+    for (x, y) in grid_centers:
+        cv2.circle(image, (x, y), 5, (0, 255, 0), -1)
     if circles is not None:
         circles = np.round(circles[0, :]).astype("int")
-
         # 获取棋盘的格子中心坐标
-        grid_centers = calculate_grid_centers(image)
+        
+        
         #print(grid_centers)
         # 遍历每个检测到的圆
         for (x, y, r) in circles:
@@ -55,17 +66,17 @@ def detect_chessboard(image, board_size=(3, 3)):
             cv2.circle(image, (x, y), r, render_color, 2)
             cv2.rectangle(image, (x - 3, y - 3), (x + 3, y + 3), render_color, -1)
             # 找到最近的格子中心
-            res = in_grid_pos((x,y),piece_type,grid_centers)  # get the info about the position of the stone
 
+            res = in_grid_pos((x,y),piece_type,grid_centers)  # get the info about the position of the stone
             if res != None:
                 chessboard_state[res[0]][res[1]] = piece_type
                 # 在图像上绘制棋子
-                
                 print(chessboard_state)
                 print(x,y)
+    
 
     # 绘制棋盘边界和网格线
-    return chessboard_state
+    return chessboard_state,previous_grid_centers
 
 
 def calculate_grid_centers(image):
@@ -126,6 +137,9 @@ def calculate_grid_centers(image):
                     black_bordered_centers.append(i[0])
             pre_list2 = []
             counter = 0
+
+            for (x, y) in black_bordered_centers:
+                cv2.circle(image, (x, y), 5, (0, 255, 0), -1)
             return black_bordered_centers
     else:
         # 检测黑框格子中心
@@ -151,10 +165,8 @@ def calculate_grid_centers(image):
                 if count >=2:
                     for k in range(count-1):
                         pre_list2.remove(i)
-
-            
         counter += 1
-
+        
         for i in black_bordered_centers:
             count=0
             for j in black_bordered_centers:
@@ -163,8 +175,7 @@ def calculate_grid_centers(image):
             if count >=2:
                 for k in range(count-1):
                     black_bordered_centers.remove(i)
-        for (x, y) in black_bordered_centers:
-            cv2.circle(frame, (x, y), 5, (0, 255, 0), -1)
+
         return black_bordered_centers
 def grid_centers_selection(gridcenters:list):
         """
@@ -237,11 +248,11 @@ def distance_grid(grid_centers):
     for i in range(len(grid_list) - 1):
         if grid_list[i][0] == grid_list[i+1][0]:  # 同一行
             distances_x.append(abs(grid_list[i][2] - grid_list[i+1][2]))
-        if grid_list[i][1] == grid_list[i+1][1]:  # 同一列
-            distances_y.append(abs(grid_list[i][3] - grid_list[i+1][3]))
+        #if grid_list[i][1] == grid_list[i+1][1]:  # 同一列
+        #    distances_y.append(abs(grid_list[i][3] - grid_list[i+1][3]))
     
     res_x = np.median(distances_x) / 2 if distances_x else 0
-    res_y = np.median(distances_y) / 2 if distances_y else 0
+    res_y = res_x
     return res_x, res_y
 
 
@@ -257,10 +268,11 @@ def in_grid_pos(circle_point,circle_type, grid_centers):
     返回：
         并返回所属格子在二维列表中的位置,list,比如 [0,1,1] 代表这个格子在第0行第一列,而且该棋子为白棋
     """
-    tolerance=-0.2
+    tolerance=-0.3
 
     distance=distance_grid(grid_centers)
     gridcenters = grid_centers_selection(grid_centers)
+
     for i in gridcenters:
             if (circle_point[0] >= int(float(i[2])-distance[0]*(1+tolerance))) and (circle_point[0]<= int(float(i[2])+distance[0]*(1+tolerance))):
                 if (circle_point[1] >= int(float(i[3])-distance[1]*(1+tolerance))) and (circle_point[1]<= int(float(i[3])+distance[1]*(1+tolerance))):
@@ -274,25 +286,25 @@ def in_grid_pos(circle_point,circle_type, grid_centers):
 
 # 示例用法
 if __name__ == "__main__":
-    # 打开摄像头
+# 打开摄像头
     cap = cv2.VideoCapture(1)
-
+    previousboard = []
     while True:
         ret, frame = cap.read()
         if not ret:
             print("Error reading frame from camera.")
             break
-
         # 检测棋盘状态
-        chessboard_state = detect_chessboard(frame, board_size=(3, 3))
-
+    
+        chessboard_state,previousboard = detect_chessboard(frame, previousboard,board_size=(3, 3))
+        
+    
         # 显示带有标注的图像
+        
         cv2.imshow("Detected Chessboard", frame)
-
         # 如果按下 'q' 键，则退出循环
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
     # 释放摄像头并关闭所有 OpenCV 窗口
     cap.release()
     cv2.destroyAllWindows()
