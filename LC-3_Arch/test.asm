@@ -1,0 +1,7 @@
+.ORIG x3000
+LD R1, num1
+LD R2, num2
+ADD R1,R2,R3
+num1 .FILL x0001
+num2 .FILL x0010
+.END
