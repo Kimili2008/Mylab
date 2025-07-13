@@ -44,7 +44,6 @@ wire [15:0] w_SR2_out;
 assign w_CPU_Bus =  (w_GateMarMux_Control)  ? w_MarMux_Out :
                     (w_GatePC_Control)      ? w_PC_Out :
                     (w_GateALU_Control)     ? w_ProcessingUnit_Out :
-                    (w_GateMarMux_Control)  ? w_MarMux_Out :
                     (w_GateMDR_Control)     ? w_MDR_Out :
                     16'hFFFF;   // Default to 65535 or -1
 always @(posedge clk) begin
@@ -98,15 +97,8 @@ LC3_regfile regfile_inst (
     .SR2_out(w_SR2_out)
 );
 
-//Memory//
-LC3_mem mem_inst (
-    .clk(clk),
-    .addr(mem_addr),
-    .d_in(mem_d_in),
-    .we(mem_we),
-    .d_out(mem_d_out)
-);
-//PC
+
+//PC//
 LC3_pc u_LC3_pc (
     .clk(clk),
     .rst(rst),
@@ -118,12 +110,7 @@ LC3_pc u_LC3_pc (
 );
 
 
-//FSM
-parameter PCFETCH = 3'b000;
-parameter DECODE = 3'b001;
-parameter EVADD = 3'b010;
-parameter OPERFETCH = 3'b011;
-parameter STORE = 3'b100;
+
 
 
 
@@ -169,6 +156,34 @@ LC3_addermux u_LC3_addermux(
     .i_addr2mux     	(w_ADDR2MUX_Control),
     .o_addermux_out 	(w_Adder_out)
 );
+
+//Marmux//
+// output declaration of module LC3_MarMux
+
+LC3_MarMux #(
+    .immediate 	(0  ),
+    .addr      	(1  ))
+u_LC3_MarMux(
+    .i_Marmux_Control 	(w_MARMUX_Control),
+    .i_offset_addr    	(w_Adder_out),
+    .i_IR_7_0         	(IR[7:0]),
+    .o_MarMux_out     	(w_MarMux_Out)
+);
+
+// output declaration of module LC3_Memory_wrapper
+//Memory//
+LC3_Memory_wrapper u_LC3_Memory_wrapper(
+    .i_CLK       	(clk),
+    .i_LED_dis   	(sw),
+    .i_LD_MDR    	(w_LD_MDR_Control),
+    .i_LD_MAR    	(w_LD_MAR_Control),
+    .i_RW        	(w_R_W_Control), //R/W
+    .i_MIO_EN    	(w_MEM_EN_Control),
+    .i_Bus       	(w_CPU_bus),
+    .o_Bus       	(o_Bus        ),
+    .o_Ready_Bit 	(o_Ready_Bit  )
+);
+
 
 
 
