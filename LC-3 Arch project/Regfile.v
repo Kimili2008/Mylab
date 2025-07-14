@@ -15,7 +15,6 @@ module LC3_regfile(
     parameter RLEN = 8;
     reg [15:0] R [0:RLEN-1];
 
-    // 寄存器文件操作（同步复位+写入）
     integer i;
     always @(posedge clk or posedge rst) begin
         if (rst) begin
