@@ -36,6 +36,8 @@ assign d_out = d_out_reg;
 
 // Memory Initialization
 //------------------------------------------------------------------------------
+parameter INIT_FILE = "mainmemory.mem"
+
 initial if (INIT_FILE) begin
     $readmemh(INIT_FILE, memory);
 end

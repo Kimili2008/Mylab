@@ -26,6 +26,7 @@ module control_store #(
     // Memory Initialization
     // Note: This is a rare case where initial blocks work in synthesizable Verilog.
     //------------------------------------------------------------------------------
+    parameter INIT_FILE = "controlstore.mem"
     initial if (INIT_FILE) begin
         $readmemb(INIT_FILE, memory);
     end
