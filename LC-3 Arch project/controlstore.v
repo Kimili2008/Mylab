@@ -28,10 +28,8 @@ module control_store #(
     //              data is read from the specified address (i_read_addr) and provided 
     //              on the output (o_read_data).
     //------------------------------------------------------------------------------
-    always @(posedge i_CLK) begin
-        if(i_read_en) begin 
-            o_read_data <= memory[i_read_addr];
-        end
+    always @(*) begin
+        o_read_data = (i_read_en) ? memory[i_read_addr] : {ElementSize{1'b0}};
     end
 
     //------------------------------------------------------------------------------

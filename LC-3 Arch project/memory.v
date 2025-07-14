@@ -14,23 +14,25 @@ reg [15:0] mem [0:127];
 always @(posedge clk) begin
     if (we) begin
         mem[w_waddr] <= d;
-        ready_bit <= 1'b1;
     end
-    if (re)begin
-        mem[w_waddr] <= d;
-        delayed_bit <= 1'b1;
-    end
-        
-    if (~we && ~re)
-        ready_bit <= 1'b0;
-    if (delayed_bit) begin
-        ready_bit <= 1'b1;
-        delayed_bit <= 1'b0;
-    end
-
 end
 
+    // 读操作（同步输出）
+always @(posedge clk) begin
+    if (re) begin
+        d_out_reg <= mem[w_raddr];
+    end
+end
+assign d_out = d_out_reg;
 
+    // 就绪信号（操作后立即就绪）
+assign ready_bit = we || re;
+
+reg [15:0] d_out_reg;
+always @(posedge clk) begin
+    if (re) d_out_reg <= mem[w_raddr];
+end
+assign d_out = d_out_reg;
 
 // Memory Initialization
 //------------------------------------------------------------------------------

@@ -50,11 +50,11 @@ module LC3_control_logic(
 
     // Memory Control 
     output  wire    o_MIO_EN, 
-    output  wire    o_R_W, 
-
+    output  wire    o_R_W
+);
     // Privilege Control
 
-    );//output  wire    o_Set_Priv          // Not in use yet
+//output  wire    o_Set_Priv          // Not in use yet
 
 wire [51:0] w_current_state;
 wire [5:0] w_next_addr;

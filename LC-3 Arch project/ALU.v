@@ -19,18 +19,19 @@ assign w_Imm5_SEXT = (operand1[4]) ? {11'b11111111111, operand1} : {11'b00000000
 
 
 always @(*) begin // @ any "input" change, update value
-    case(i_IR_5)
-        1'b0: MUX_Out = operand0;     // SR2 from register file  
-        1'b1: MUX_Out = w_Imm5_SEXT;   // Immediate 5 (from IR)
+    case(SR2MUX)
+        1'b0: MUX_out = operand0;     // SR2 from register file  
+        1'b1: MUX_out = w_Imm5_SEXT;   // Immediate 5 (from IR)
     endcase
 end
 
 always @(*) begin
     case(opcode)
-        ADD: alu_out <= MUX_out + operand2;
-        AND: alu_out <= MUX_out & operand2;
-        NOT: alu_out <= ~MUX_out;
-        PASS1: alu_out <= MUX_out;
+        ADD: alu_out = MUX_out + operand2;
+        AND: alu_out = MUX_out & operand2;
+        NOT: alu_out = ~MUX_out;
+        PASS1: alu_out = MUX_out;
+        default: alu_out = 16'h0000;
     endcase
 end
 
