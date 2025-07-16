@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module LC3_pc(
     input wire clk,
     input wire rst,

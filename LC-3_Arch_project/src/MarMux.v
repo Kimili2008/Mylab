@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 //combinational
 module LC3_MarMux(
     input wire i_Marmux_Control,

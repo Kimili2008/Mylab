@@ -1,4 +1,4 @@
-
+`timescale 1ns/1ps
 //process : the regfile and alu is finished//
 //addermux is finished//
 //buses'definitions are defined//
@@ -26,7 +26,6 @@ module LC3(
 //LC-3//
 wire [3:0] sw; // the led states line
 reg [15:0] IR;
-reg [3:0] led_state; 
 //Buses//
 wire [15:0] w_CPU_bus ; //only one signal passes through this line at a time
 wire [15:0] w_Adder_out ;//From the PC adder
@@ -37,17 +36,9 @@ wire [15:0] w_MDR_out;
 wire [15:0] w_SR1_out;
 wire [15:0] w_SR2_out;
 wire [15:0] w_MarMux_out;
-//Tri-state Gates//
-// Control what is on CPU bus (gates) 
-assign w_CPU_bus =  (w_GateMarMux_Control)  ? w_MarMux_out :
-                    (w_GatePC_Control)      ? w_PC_out :
-                    (w_GateALU_Control)     ? w_ALU_out :
-                    (w_GateMDR_Control)     ? w_MDR_out :
-                    16'hFFFF;   // Default to 65535 or -1
-always @(posedge clk) begin
-    if (w_LD_IR_Control)
-        IR <= w_CPU_bus;
-end
+
+
+
 
 
 //Wire control signals
@@ -77,6 +68,19 @@ wire [1:0] w_ALUK_Control;
 //Memory Control
 wire w_MEM_EN_Control;
 wire w_R_W_Control; //Read-Write Control
+//Tri-state Gates//
+// Control what is on CPU bus (gates) 
+assign w_CPU_bus =  (w_GateMarMux_Control)  ? w_MarMux_out :
+                    (w_GatePC_Control)      ? w_PC_out :
+                    (w_GateALU_Control)     ? w_ALU_out :
+                    (w_GateMDR_Control)     ? w_MDR_out :
+                    16'hFFFF;   // Default to 65535 or -1
+always @(posedge clk) begin
+    if (w_LD_IR_Control)
+        IR <= w_CPU_bus;
+end
+
+
 
 //led display
 wire [15:0] w_Seg_Reg_out;
@@ -120,7 +124,7 @@ LC3_alu alu_inst (
     .operand0(w_SR2_out), //
     .operand2(w_SR1_out),
     .opcode(w_ALUK_Control),
-    .SR2MUX(w_SR2MUX_Control),
+    .SR2MUX(IR[5]),
     .alu_out(w_ALU_out)
 );
 
@@ -146,7 +150,7 @@ LC3_control_logic u_LC3_control_logic(
     .o_GateMarMux 	(w_GateMarMux_Control),
     .o_PCMUX      	(w_PCMUX_Control),
     .o_DRMUX      	(w_DRMUX_Control),
-    .o_SR1MUX     	(w_SR1_out),
+    .o_SR1MUX     	(w_SR1MUX_Control),
     .o_ADDR1MUX   	(w_ADDR1MUX_Control),
     .o_ADDR2MUX   	(w_ADDR2MUX_Control),
     .o_MARMUX     	(w_MARMUX_Control),
@@ -212,12 +216,14 @@ LC3_Memory_wrapper u_LC3_Memory_wrapper(
 
 //LED display
 reg [15:0] Seg_reg;
+reg [11:0] counter1;
+reg [1:0] counter2;
 assign sw = led_output;
 always @(posedge btn) begin
     led_output <= led_output + 1;
 end
 //数位管扫描功能实现
-parameter counter = 12'd2500;
+parameter counter = 12'd2500;//2500
 always @(posedge clk or posedge rst) begin
     if (rst) begin
         led_output <= 4'b0000;
@@ -247,7 +253,7 @@ parameter R7 = 4'b0111;
 parameter PC = 4'b1000;
 parameter MAR = 4'b1001;
 parameter MDR = 4'b1010;
-parameter IR = 4'b1011;
+parameter Ir = 4'b1011;
 
 
 always @(*) begin
@@ -263,7 +269,7 @@ always @(*) begin
         PC: Seg_reg <= w_PC_out ;
         //MAR: Seg_reg <= w_MAR_out ;
         MDR: Seg_reg <= w_MDR_out ;
-        IR: Seg_reg <= IR ;
+        Ir: Seg_reg <= IR ;
         default: Seg_reg <= 16'h0000;
     endcase
 end

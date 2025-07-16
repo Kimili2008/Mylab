@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module LC3_nzp ( 
     input   wire                i_CLK,
     // From Control Store:
@@ -8,7 +9,7 @@ module LC3_nzp (
     output  wire    [2: 0]      o_NZP // Goes to BUS and Addr1Mux
     );
 
-
+    wire [2:0] w_Logic; // N=2, Z=1, P=0
     // The NZP Register
     // --------------------------------------------------
     reg [2:0] r_NZP;
@@ -23,7 +24,7 @@ module LC3_nzp (
 
     // Condition Codes Logic 
     // --------------------------------------------------
-    wire [2:0] w_Logic; // N=2, Z=1, P=0
+
 
     assign w_Logic[2] = (i_Bus[15] == 1'b1) ? 1'b1 : 1'b0;                          // N if MSB is a 1 (2's compliment)
     assign w_Logic[1] = (i_Bus == 16'h0000) ? 1'b1 : 1'b0;                          // Z if the entire value is 0

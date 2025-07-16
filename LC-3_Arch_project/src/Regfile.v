@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module LC3_regfile(
     input wire [2:0] DR,
     input wire [2:0] SR1,

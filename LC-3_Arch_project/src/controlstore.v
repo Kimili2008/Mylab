@@ -1,7 +1,6 @@
 //Control store controls all signals
 
 module control_store #( 
-    parameter       INIT_FILE   = "../ControlSignals/output.txt", 
     parameter       AddrBusSize = 6,
     parameter       NumElements = 64,
     parameter       ElementSize = 52)(   
@@ -13,12 +12,12 @@ module control_store #(
     //------------------------------------------------------------------------------
     // Memory Declaration
     //------------------------------------------------------------------------------
-    reg [ElementSize-1: 0] memory [NumElements];
+    reg [51: 0] memory [63:0];
 
     //------------------------------------------------------------------------------
     // Read/Write Operations
     //------------------------------------------------------------------------------
-    always @(*) begin
+    always @(posedge i_CLK) begin
         o_read_data = (i_read_en) ? memory[i_read_addr] : {ElementSize{1'b0}};
     end
 
@@ -26,9 +25,9 @@ module control_store #(
     // Memory Initialization
     // Note: This is a rare case where initial blocks work in synthesizable Verilog.
     //------------------------------------------------------------------------------
-    parameter INIT_FILE = "controlstore.mem"
-    initial if (INIT_FILE) begin
-        $readmemb(INIT_FILE, memory);
+    localparam INIT_FILE_2 = "controlstore.mem";
+    initial if (INIT_FILE_2) begin
+        $readmemb(INIT_FILE_2, memory);
     end
 
 endmodule

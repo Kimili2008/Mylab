@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // This defines the adder used in relative addressing
 module LC3_addermux(
     // R1-PC mux

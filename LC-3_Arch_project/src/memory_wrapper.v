@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 // encapsulates MAR MDR and RAM
 module LC3_Memory_wrapper(
     input wire i_CLK, 
@@ -23,6 +24,7 @@ wire [15:0] w_Memory_Out;
 // ---------------------------
 reg [15:0] r_MDR;
 reg [15:0] r_MAR;
+wire [15:0] w_Feed_MDR;
 assign o_Bus = r_MDR; // Output MDR onto CPU bus (gated by top mod)
 
 always @(posedge i_CLK) begin
@@ -33,7 +35,7 @@ always @(posedge i_CLK) begin
 end
 // ---------------------------
 // Bus or Memory Mux (to MDR)
-wire [15:0] w_Feed_MDR;
+
 assign w_Feed_MDR = (i_MIO_EN) ? w_Memory_Out : i_Bus;
 
 
@@ -50,8 +52,8 @@ LC3_mem u_LC3_mem(
     .clk       	(i_CLK       ),
     .we        	(w_Write),
     .re        	(w_Read),
-    .w_raddr   	(r_MAR),
-    .w_waddr   	(r_MAR),
+    .w_raddr   	(r_MAR[6:0]),
+    .w_waddr   	(r_MAR[6:0]),
     .d         	(r_MDR),
     .d_out     	(w_Memory_Out),
     .ready_bit 	(o_Ready_Bit)

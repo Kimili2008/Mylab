@@ -1,4 +1,4 @@
-
+`timescale 1ns/1ps
 // This module encapsulates control store and microsequencer.//
 // The microinstructions are stored in controlstore and microsequencer determines the main counter.//
 // Control logic wraps up all control signals and sends out to other modules//
@@ -59,8 +59,10 @@ module LC3_control_logic(
 wire [51:0] w_current_state;
 wire [5:0] w_next_addr;
 // output declaration of module LC3_microsequencer
-
-
+wire            w_IRD       = w_current_state[51];
+wire    [2:0]   w_COND      = w_current_state[50:48];
+wire    [5:0]   w_J_Field   = w_current_state[47:42];
+wire   w_LD_BEN        = w_current_state[38];   // BEN is internal to this module
 LC3_microsequencer #(
     .BEN  	(010  ),
     .R    	(001  ),
@@ -82,7 +84,6 @@ u_LC3_microsequencer(
 // output declaration of module control_store
 
 control_store #(
-    .INIT_FILE   	("../ControlSignals/output.txt"  ),
     .AddrBusSize 	(6                               ),
     .NumElements 	(64                              ),
     .ElementSize 	(52                              ))
@@ -97,15 +98,13 @@ u_control_store(
 
 
 // Control Signals for Microsequencer 
-wire            w_IRD       = w_current_state[51];
-wire    [2:0]   w_COND      = w_current_state[50:48];
-wire    [5:0]   w_J_Field   = w_current_state[47:42];
+
 
     // Load Registers (datapath and register file)
 assign o_LD_MAR        = w_current_state[41];
 assign o_LD_MDR        = w_current_state[40];
 assign o_LD_IR         = w_current_state[39];
-wire   w_LD_BEN        = w_current_state[38];   // BEN is internal to this module
+
 assign o_LD_REG        = w_current_state[37];
 assign o_LD_CC         = w_current_state[36];
 assign o_LD_PC         = w_current_state[35];
