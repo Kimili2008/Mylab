@@ -8,9 +8,8 @@
 //microinstructions development finished//
 //initialisation
 //debounce btn logic
-
 module LC3(
-    input clk,
+    input clk_0,
     input rst,
     input btn, //increment the value of LED register by one
     output reg[7:0] seg_output_single,
@@ -21,7 +20,12 @@ module LC3(
 
 //clk signal handle-
 //FPGA Crystal Oscillater 50MHZ
-
+wire clk;
+reg [2:0] clk_cnt = 3'b000;
+always @(posedge clk_0) begin
+    clk_cnt <= clk_cnt + 1;
+end
+assign clk = clk_cnt[2];
 
 //LC-3//
 wire [3:0] sw; // the led states line
@@ -75,6 +79,18 @@ assign w_CPU_bus =  (w_GateMarMux_Control)  ? w_MarMux_out :
                     (w_GateALU_Control)     ? w_ALU_out :
                     (w_GateMDR_Control)     ? w_MDR_out :
                     16'hFFFF;   // Default to 65535 or -1
+    
+//wire [3:0] bus_sel = {w_GateMarMux_Control, w_GatePC_Control, 
+                     //w_GateALU_Control, w_GateMDR_Control};
+//always @(*) begin
+  //  casex(bus_sel)
+    //    4'b1xxx: w_CPU_bus <= w_MarMux_out;
+      //  4'b01xx: w_CPU_bus = w_PC_out;
+        //4'b001x: w_CPU_bus = w_ALU_out;
+        //4'b0001: w_CPU_bus = w_MDR_out;
+        //default: w_CPU_bus = 16'hFFFF;
+    //endcase
+//end
 always @(posedge clk) begin
     if (w_LD_IR_Control)
         IR <= w_CPU_bus;
@@ -213,35 +229,6 @@ LC3_Memory_wrapper u_LC3_Memory_wrapper(
 );
 
 
-
-//LED display
-reg [15:0] Seg_reg;
-reg [11:0] counter1;
-reg [1:0] counter2;
-assign sw = led_output;
-always @(posedge btn) begin
-    led_output <= led_output + 1;
-end
-//数位管扫描功能实现
-parameter counter = 12'd2500;//2500
-always @(posedge clk or posedge rst) begin
-    if (rst) begin
-        led_output <= 4'b0000;
-        Seg_reg <= 16'h0000;
-        counter1 <= 12'd0;
-        counter2 <= 2'b00;
-    end
-    else begin
-        if (counter1 == counter) begin
-            counter1 <= 12'd0;
-            counter2 <= counter2 + 1;
-        end
-        else begin
-            counter1 <= counter1 + 1;
-        end
-    end
-end
-
 parameter R0 = 4'b0000;
 parameter R1 = 4'b0001;
 parameter R2 = 4'b0010;
@@ -255,24 +242,54 @@ parameter MAR = 4'b1001;
 parameter MDR = 4'b1010;
 parameter Ir = 4'b1011;
 
-
-always @(*) begin
-    case (led_output)
-        R0: Seg_reg <= w_Seg_Reg_out;
-        R1: Seg_reg <= w_Seg_Reg_out ;
-        R2: Seg_reg <= w_Seg_Reg_out ;
-        R3: Seg_reg <= w_Seg_Reg_out ;
-        R4: Seg_reg <= w_Seg_Reg_out ;
-        R5: Seg_reg <= w_Seg_Reg_out ;
-        R6: Seg_reg <= w_Seg_Reg_out ;
-        R7: Seg_reg <= w_Seg_Reg_out ;
-        PC: Seg_reg <= w_PC_out ;
-        //MAR: Seg_reg <= w_MAR_out ;
-        MDR: Seg_reg <= w_MDR_out ;
-        Ir: Seg_reg <= IR ;
-        default: Seg_reg <= 16'h0000;
-    endcase
+//LED display
+reg [15:0] Seg_reg;
+reg [11:0] counter1;
+reg [1:0] counter2;
+assign sw = led_output;
+always @(posedge btn or posedge rst) begin
+    if (rst) begin
+        led_output <= 4'b0000;
+    end
+    else begin
+    led_output <= led_output + 1;
+    end
 end
+//数位管扫描功能实现
+parameter counter = 12'd2500;//2500
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        Seg_reg <= 16'h0000;
+        counter1 <= 12'd0;
+        counter2 <= 2'b00;
+    end
+    else begin
+        if (counter1 == counter) begin
+            counter1 <= 12'd0;
+            counter2 <= counter2 + 1;
+        end
+        else begin
+            counter1 <= counter1 + 1;
+        end
+        case (led_output)
+            R0: Seg_reg <= w_Seg_Reg_out;
+            R1: Seg_reg <= w_Seg_Reg_out ;
+            R2: Seg_reg <= w_Seg_Reg_out ;
+            R3: Seg_reg <= w_Seg_Reg_out ;
+            R4: Seg_reg <= w_Seg_Reg_out ;
+            R5: Seg_reg <= w_Seg_Reg_out ;
+            R6: Seg_reg <= w_Seg_Reg_out ;
+            R7: Seg_reg <= w_Seg_Reg_out ;
+            PC: Seg_reg <= w_PC_out ;
+        //MAR: Seg_reg <= w_MAR_out ;
+            MDR: Seg_reg <= w_MDR_out ;
+            Ir: Seg_reg <= IR ;
+            default: Seg_reg <= 16'h0000;
+        endcase
+    end
+end
+
+
 
 
 // 数字到七段码的映射（共阴极数码管）
@@ -307,7 +324,7 @@ wire [3:0] digit2 = Seg_reg[11:8];
 wire [3:0] digit1 = Seg_reg[7:4];
 wire [3:0] digit0 = Seg_reg[3:0];   // 最低位
 
-always @(*) begin
+always @(posedge clk) begin
     case (counter2)
         2'b00:begin
             seg_output_sequence <= 4'b0001;
@@ -333,4 +350,3 @@ always @(*) begin
     endcase
 end
 endmodule
-

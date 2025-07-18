@@ -11,10 +11,9 @@ reg r_Reset = 3'b0;
 //clk generation
 localparam  DURATION = 25000;
 reg     clk = 0;
-reg btn = 0;
+reg     btn = 0;
 always begin 
-    #20    clk = ~clk;
-
+        #20    clk = ~clk;
 end
 
 always begin
@@ -25,7 +24,7 @@ end
 //cycle 12.5 MHZ
 
 LC3 #(
-    .counter 	(2500  ),
+    .counter 	(2  ),
     .R0      	(0000  ),
     .R1      	(0001  ),
     .R2      	(0010  ),
@@ -39,7 +38,7 @@ LC3 #(
     .MDR     	(1010  ),
     .Ir      	(1011  ))
 u_LC3(
-    .clk                 	(clk                  ),
+    .clk_0                 	(clk                  ),
     .rst                 	(r_Reset              ),
     .btn                 	(btn                  ),
     .seg_output_single   	(seg_output_single    ),
@@ -55,9 +54,9 @@ u_LC3(
 
 initial begin
         // Pulse the Reset line to clean restart the LC3 to state 18
-    #(10*40)   
+    #(60*40)   
     r_Reset = 1'b1;
-    #(40)
+    #(40*10)
     r_Reset = 1'b0;
 end 
 

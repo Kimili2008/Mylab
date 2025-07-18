@@ -1,8 +1,8 @@
 memory_initialization_radix=16;
 memory_initialization_vector=
-2203,  // 0x00: LD R1, num1 (PC+3 -> 0x04)
-2403,  // 0x01: LD R2, num2 (PC+3 -> 0x06)
-1042,  // 0x02: ADD R0, R1, R2 (R0 = R1 + R2)
-F025,  // 0x03: HALT
-0001,  // 0x04: num1 = 0x0001
-0010;  // 0x05: num2 = 0x0010
+2203,
+2403,
+1042,
+F025, 
+0001, 
+0010; 

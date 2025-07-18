@@ -1,5 +1,3 @@
-//Control store controls all signals
-
 module control_store #( 
     parameter       AddrBusSize = 6,
     parameter       NumElements = 64,

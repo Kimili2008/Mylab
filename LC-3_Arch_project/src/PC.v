@@ -10,10 +10,10 @@ module LC3_pc(
 );
 
     reg [15:0] pc;
-
+    
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            pc <= 16'd0;       // 同步复位
+            pc <= 16'd0;
         end
         else if (ld_pc) begin  
             case (pc_mux)
