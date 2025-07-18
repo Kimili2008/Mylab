@@ -1,32 +1,17 @@
 memory_initialization_radix=16;
 memory_initialization_vector=
-2216  ; LD R1, LENGTH (x0018)
-0404  ; BRz DONE (x000A)
-127F  ; ADD R1, R1, #-1
-0602  ; BRnz DONE (x000A)
-54A0  ; OUTER: AND R2, R2, #0
-14A1  ; ADD R2, R2, R1
-2617  ; LD R3, ARRAY (x0019)
-6680  ; INNER: LDR R4, R3, #0
-6A81  ; LDR R5, R3, #1
-96BF  ; NOT R6, R5
-16C1  ; ADD R6, R6, #1
-1906  ; ADD R6, R4, R6
-0401  ; BRnz NO_SWAP (x000E)
-7680  ; STR R5, R3, #0
-6281  ; STR R4, R3, #1
-16E1  ; NO_SWAP: ADD R3, R3, #1
-14BF  ; ADD R2, R2, #-1
-03F6  ; BRp INNER (x0007)
-127F  ; ADD R1, R1, #-1
-03F1  ; BRp OUTER (x0004)
-F025  ; DONE: HALT
-0000  ; (未使用)
-0000  ; (未使用)
-0000  ; (未使用)
-0005  ; 数组长度=5 (示例)
-0003  ; 数组[0]=3 (示例)
-0001  ; 数组[1]=1 (示例)
-0004  ; 数组[2]=4 (示例)
-0002  ; 数组[3]=2 (示例)
-0005  ; 数组[4]=5 (示例
+2005,
+2206,
+2407,
+2608,
+2809,
+F025,
+0000,
+0000,
+0000,
+0005,
+0003,
+0001,
+0004,
+0002,
+0005;
