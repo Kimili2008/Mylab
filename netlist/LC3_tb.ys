@@ -1,3 +1,0 @@
-read_verilog -sv -formal -overwrite {workspace}/LC-3 Arch project/src/process_tb.v
-design -reset-vlog; proc;
-write_json {workspace}/netlist/LC3_tb.json
