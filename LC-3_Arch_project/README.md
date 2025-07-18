@@ -1,15 +1,17 @@
-## LC-3 implementation based on verilog and vivado IDE
-2025/7/16
-This project has been lingering on my mind since last summer holiday.
+## 基于verilog和vivado实现的LC-3处理器
+写于2025/7/16
+在去年这个时候，我就想过要完成这个项目，不过因为有太多的前置知识漏洞而拖到了现在。期间我学习了数字电路基础，verilog开发基础，部分模拟电路基础，计算机系统概论，虽然学的不怎么样，也算是把该学的都补上了
 
+不过经过一番熬夜和苦干，这个处理器开发也是接近完成了。在此还要感谢别人友情赠送的几千块的FPGA，省去了很多麻烦。
 
+目前仿真已经通过，这个处理器拥有2MB RAM，12.5MHZ的时钟频率。接下来综合再上板就可以了。
 
 参考内容：
 https://github.com/MatthewKing2/LC3-CPU/blob/main/ControlSignals/ControlStore.csv
-
+感谢他的control signal编写，使得我不用敲那么多0和1了
 https://soc.ustc.edu.cn/Digital/2024/lab8/modules/
 中国科技大学的digitallab基础班，这个项目的要求也是来源于此，不得不说这个项目让我看到了我和优秀学生的差距。
 感谢他们的教程。
 
 写于2025/7/18
-这个project比想象中的要复杂许多，之前我的verilog开发过程和练习一直专注于如何通过仿真，没有花时间在综合和
+这几天废寝忘食的研究，但依然没有什么进展，这个project比想象中的要复杂许多，本来我的目标是成功上板的，但14个组合环成功把我的进度拖住了。面对堆积成山的作业和英语考试的要求，这个项目在目前只会做到冒泡排序和求解两数最大公因数的代码，更深的就不研究了。
