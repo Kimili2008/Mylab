@@ -58,8 +58,8 @@ module LC3_regfile(
     end
 
     always @(*) begin
-        SR1_out = (we && w_DRMUX_Out==w_SR1MUX_Out) ? d : R[w_SR1MUX_Out]; 
-        SR2_out = (we && w_DRMUX_Out==SR2) ? d : R[SR2];
+        SR1_out = R[w_SR1MUX_Out]; 
+        SR2_out = R[SR2];
         DIS_reg = R[DIS_sw[2:0]];  // 显示选择
     end
 

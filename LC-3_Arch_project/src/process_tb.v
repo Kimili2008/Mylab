@@ -13,7 +13,7 @@ localparam  DURATION = 60000;
 reg     clk = 0;
 reg     btn = 0;
 always begin 
-        #20    clk = ~clk;
+        #5    clk = ~clk;
 end
 
 always begin
@@ -54,7 +54,7 @@ u_LC3(
 
 initial begin
         // Pulse the Reset line to clean restart the LC3 to state 18
-    #(60*40)   
+    #(10*40)   
     r_Reset = 1'b1;
     #(40*10)
     r_Reset = 1'b0;
