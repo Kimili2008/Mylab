@@ -63,11 +63,7 @@ wire            w_IRD       = w_current_state[51];
 wire    [2:0]   w_COND      = w_current_state[50:48];
 wire    [5:0]   w_J_Field   = w_current_state[47:42];
 wire   w_LD_BEN        = w_current_state[38];   // BEN is internal to this module
-LC3_microsequencer #(
-    .BEN  	(010  ),
-    .R    	(001  ),
-    .IR11 	(011  ))
-u_LC3_microsequencer(
+LC3_microsequencer u_LC3_microsequencer(
     .i_CLK              	(i_clk               ),
     .i_Reset            	(i_Reset             ),
     .i_j_field          	(w_J_Field),

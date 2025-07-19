@@ -39,16 +39,16 @@ module LC3_microsequencer (
     wire w_BEN_Reg;
     assign w_BEN_Reg = r_BEN;
 
-    // The Actual Microsequencer (big fancy mux)
+    // The Actual Microsequencer
     // ---------------------------------------------------------------
-    assign o_AddressNextState = (i_Reset)                   ?   16'h0012 :
-                                (i_IRD)                     ?   {2'b00, i_IR_15_9[15:12]} : // The addr of microinstructions e.g. not 1001 addr: 6'b001001
+    assign o_AddressNextState = (i_Reset)                   ?   6'h12 :
+                                (i_IRD)                     ?   {2'b00, i_IR_15_9[15:12]}: // The addr of microinstructions e.g. not 1001 addr: 6'b001001
                              // (i_COND_bits == ACV)        ?   {          i_ACV,      5'b00000}   | i_j_field:
                              // (i_COND_bits == INT)        ?   {1'b0,     i_INT,      4'b0000}    | i_j_field:
                              // (i_COND_bits == PSR15)      ?   {2'b00,    i_PSR_15,   3'b000}     | i_j_field:
-                                (i_COND_bits == BEN)        ?   {3'b000,   w_BEN_Reg,  2'b00}      | i_j_field:  // if true, the next instruction is 
-                                (i_COND_bits == R)          ?   {4'b0000,  i_R_Bit,    1'b0}       | i_j_field:
-                                (i_COND_bits == IR11)       ?   {5'b00000, i_IR_15_9[11]}           | i_j_field: // JSR if true, jmp to j_field + 1 or j_field
+                                (i_COND_bits == 3'b010)        ?   {3'b000,   w_BEN_Reg,  2'b00}  | i_j_field:  // if true, the next instruction is 22
+                                (i_COND_bits == 3'b001)          ?   {4'b0000,  i_R_Bit,    1'b0}       | i_j_field:
+                                (i_COND_bits == 3'b011)       ?   {5'b00000, i_IR_15_9[11]}           | i_j_field: // JSR if true, jmp to j_field + 1 or j_field
                                 i_j_field;  // Default Case
 
 endmodule

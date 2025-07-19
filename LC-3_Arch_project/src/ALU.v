@@ -4,6 +4,9 @@ module LC3_alu(
     input wire[15:0] operand2,
     input wire[15:0] operand0,
     input wire SR2MUX,
+    
+    //SR1 and DR MUX
+    
     input wire[1:0] opcode,
     output reg[15:0] alu_out
 );
@@ -15,6 +18,10 @@ parameter PASS1 = 2'b11;
 reg [15:0] MUX_out;
 wire [15:0] w_Imm5_SEXT;
 assign w_Imm5_SEXT = (operand1[4]) ? {11'b11111111111, operand1} : {11'b00000000000, operand1};
+
+
+
+
 
 
 
@@ -34,5 +41,7 @@ always @(*) begin
         default: alu_out = 16'h0000;
     endcase
 end
+
+
 
 endmodule

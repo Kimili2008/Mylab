@@ -9,7 +9,7 @@
 //initialisation
 //debounce btn logic
 module LC3(
-    input clk_0,
+    input clk,
     input rst,
     input btn, //increment the value of LED register by one
     output reg[7:0] seg_output_single,
@@ -20,12 +20,7 @@ module LC3(
 
 //clk signal handle-
 //FPGA Crystal Oscillater 50MHZ
-wire clk;
-reg [2:0] clk_cnt = 3'b000;
-always @(posedge clk_0) begin
-    clk_cnt <= clk_cnt + 1;
-end
-assign clk = clk_cnt[2];
+
 
 //LC-3//
 wire [3:0] sw; // the led states line
@@ -79,18 +74,7 @@ assign w_CPU_bus =  (w_GateMarMux_Control)  ? w_MarMux_out :
                     (w_GateALU_Control)     ? w_ALU_out :
                     (w_GateMDR_Control)     ? w_MDR_out :
                     16'hFFFF;   // Default to 65535 or -1
-    
-//wire [3:0] bus_sel = {w_GateMarMux_Control, w_GatePC_Control, 
-                     //w_GateALU_Control, w_GateMDR_Control};
-//always @(*) begin
-  //  casex(bus_sel)
-    //    4'b1xxx: w_CPU_bus <= w_MarMux_out;
-      //  4'b01xx: w_CPU_bus = w_PC_out;
-        //4'b001x: w_CPU_bus = w_ALU_out;
-        //4'b0001: w_CPU_bus = w_MDR_out;
-        //default: w_CPU_bus = 16'hFFFF;
-    //endcase
-//end
+
 always @(posedge clk) begin
     if (w_LD_IR_Control)
         IR <= w_CPU_bus;
@@ -107,6 +91,8 @@ LC3_regfile regfile_inst (
     .DR(IR[11:9]),
     .SR1(IR[8:6]),
     .SR2(IR[2:0]), // controls the immediate
+    .i_SR1MUX(w_SR1MUX_Control),
+    .i_DRMUX(w_DRMUX_Control),
     .d(w_CPU_bus),
     .we(w_LD_REG_Control),
     .DIS_sw(sw),
