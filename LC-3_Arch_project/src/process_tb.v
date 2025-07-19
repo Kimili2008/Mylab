@@ -9,7 +9,7 @@ wire [3:0] seg_output_sequence;
 wire [3:0] led_output;
 reg r_Reset = 3'b0; 
 //clk generation
-localparam  DURATION = 20000;
+localparam  DURATION = 60000;
 reg     clk = 0;
 reg     btn = 0;
 always begin 

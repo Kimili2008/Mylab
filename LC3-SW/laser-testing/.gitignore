@@ -1,0 +1,22 @@
+# ignore build artifacts
+*.o
+laser
+laser-*
+*.exe
+*.ifp
+*.zip
+
+# ignore test files
+*.txt
+*.asm
+*.sym
+*.lst
+*.bin
+*.hex
+*.obj
+*.log
+
+# ignore personal configs
+.vscode
+test
+*.pdf
