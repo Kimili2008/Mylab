@@ -37,7 +37,7 @@ always @(*) begin
         ADD: alu_out = MUX_out + operand2;
         AND: alu_out = MUX_out & operand2;
         NOT: alu_out = ~MUX_out;
-        PASS1: alu_out = MUX_out;
+        PASS1: alu_out = operand2;
         default: alu_out = 16'h0000;
     endcase
 end
