@@ -1,32 +1,30 @@
-## goal of project
-Simulate an LC-3 CPU based on hardware desciption language. (in my case it's verilog and vivado IDE)
-The CPU can
-1. successfully execute up to 15 instructions. (interrupt handling excluded)
-2. show the content of the registers through four 7-segments.
-3. change the output object by pressing the bottom, namely giving the btn signal high voltage.
-4. show which register is being displayed at present by four LEDs.
-5. execute complex programs.
+## Project Goal  
+Simulate an LC-3 CPU using a hardware description language (Verilog) on the Vivado IDE. The CPU should meet the following requirements:  
+1. Successfully execute up to 15 instructions (excluding interrupt handling).  
+2. Display register contents on four 7-segment displays.  
+3. Allow switching the displayed register by pressing a button (triggered by a high-voltage signal).  
+4. Indicate the currently displayed register using four LEDs.  
+5. Execute complex programs.  
 
+## Feasibility Analysis  
 
-## Feasibility analysis
-*material* 
-ZNYQ 7020z sponsored by my dad's colleague.
-It contains: an FPGA with a 50 MHZ crystal oscillator; a powerful arm chip
-This project will only involves the FPGA part due to the complexity of arm's ISA
-My goal is to successfully simulate the LC-3 CPU, excluding I/O interactions, which means interrupt handling won't be considered.
+### Hardware Resources  
+The project will use the **ZNYQ 7020z** development board, provided by my dad's colleague. It includes:  
+- An FPGA with a **50 MHz crystal oscillator**  
+- A powerful ARM chip (though only the FPGA portion will be utilized due to the complexity of ARM's ISA)  
 
-Patt from Yale, in his book, *Introductions to Computing Systems: From Bits & Gates to C/C++ and Beyond*, described the implementation of LC-3 elaborately.
+The simulation will focus on the LC-3 CPU itself, excluding I/O interactions and interrupt handling.  
 
-https://users.ece.utexas.edu/~patt/19f.306/Handouts/LC3_State_Machine.pdf
-Utexas'teaching materials: state machine of LC-3, which can be the perfect complement for Patt's book.
+### Reference Materials  
+1. **Yale Patt's Book**:  
+   *Introduction to Computing Systems: From Bits & Gates to C/C++ and Beyond* provides a detailed description of LC-3 implementation.  
+2. **University of Texas Teaching Materials**:  
+   The [LC-3 State Machine PDF](https://users.ece.utexas.edu/~patt/19f.306/Handouts/LC3_State_Machine.pdf) complements Patt's book by explaining the state machine design.  
+3. **Existing Implementations**:  
+   The [LC3-CPU GitHub project](https://github.com/MatthewKing2/LC3-CPU/blob/main/docs/LC3_State_Machine.pdf) serves as a reference, though some corrections may be needed in its code.  
 
-At the same time,
-https://github.com/MatthewKing2/LC3-CPU/blob/main/docs/LC3_State_Machine.pdf
-There are already implementations of the LC3-CPU. Despite the errors in his code, his structure can still be a reference.
-
-In a word, this is a feasible and challenging project with detailed bibliography,that undoubtably delivers a solid platform for learning.
-
-
+### Conclusion  
+This project is **feasible and challenging**, with ample reference materials available. It provides an excellent platform for learning CPU architecture and Verilog design.
 
 
 

@@ -12,9 +12,14 @@ https://github.com/MatthewKing2/LC3-CPU/blob/main/ControlSignals/ControlStore.cs
 https://soc.ustc.edu.cn/Digital/2024/lab8/modules/
 中国科技大学的digitallab基础班，这个项目的要求也是来源于此，不得不说这个项目让我看到了我和优秀学生的差距。
 感谢他们的教程。
+https://users.ece.utexas.edu/~patt/19f.306/Handouts/LC3_State_Machine.pdf
+utexas的LC3 FSM，可以说这个项目能被一个高中生做出来的原因就是这个。
 
 写于2025/7/18
-
 这几天废寝忘食的研究，但依然没有什么进展，这个project比想象中的要复杂许多，本来我的目标是成功上板的，但14个组合环成功把我的进度拖住了。面对堆积成山的作业和英语考试的要求，这个项目在目前只会做到冒泡排序和求解两数最大公因数的代码，更深的就不研究了。
 
 我将在大一以风卷残云之势完成这个项目www
+
+写于2025/7/20
+在编写斐波那契数列的汇编时发现指令不支持自增，仿真的时候就卡在那里不动也不报错，后来根据断点看出了是组合环导致的。
+这个组合环横跨7根导线，5个单元，真是令人头大，不过所幸问题解决了。
