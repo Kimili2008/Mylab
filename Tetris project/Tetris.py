@@ -13,7 +13,7 @@ import sys
 #10/24 changes:data transmission four types of data: up down left right
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)	
 s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+signal.signal(signal.SIGFPE, signal.SIG_IGN)
 
 # Quit and enter
 print("Welcome \n to \n Tetris!")
@@ -169,7 +169,7 @@ screen = pygame.display.set_mode((1020,640))
 screen.fill(colors("cream"))
 pygame.display.set_caption("Tetris")
 pygame.display.flip()
-font = pygame.font.Font("/mnt/c/Windows/Fonts/MTCORSVA.TTF",40)
+font = pygame.font.Font("C:\\Windows\\Fonts\\MTCORSVA.TTF",40)
 
     
 # drawer
