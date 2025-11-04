@@ -365,7 +365,7 @@ def drawer():
     pygame.draw.rect(screen,colors("metal blue"),(410,0,200,640),10)
     pygame.draw.rect(screen,colors("metal blue"),(0,0,1020,640),10)
     pygame.draw.rect(screen,colors("metal blue"),(410,200,200,10),5)
-    font = pygame.font.Font("/mnt/c/Windows/Fonts/MTCORSVA.TTF",40)
+    font = pygame.font.Font("C:\\Windows\\Fonts\\MTCORSVA.TTF",40)
     score1 = "Score"
     textforscore = font.render(score1,True,colors("Green"))
     introduction = "Welcome!"
